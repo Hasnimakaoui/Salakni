@@ -37,16 +37,14 @@ jobs:
           SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager 2>/dev/null | head -n 1)"
 
           if [ -z "$SDKMANAGER" ]; then
-            echo "ERROR: Android SDK manager was not found."
+            echo "Android SDK manager was not found."
             exit 1
           fi
 
-          echo "SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
           echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
 
-      - name: Install required Android SDK packages
-        shell: bash
+      - name: Install Android SDK packages
         run: |
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" --install \
@@ -56,6 +54,28 @@ jobs:
 
       - name: Install project dependencies
         run: npm install
+
+      - name: Prepare source files
+        shell: bash
+        run: |
+          mkdir -p src/lib
+          cp App.tsx src/App.tsx
+          cp main.tsx src/main.tsx
+          cp styles.css src/styles.css
+          cp vite-env.d.ts src/vite-env.d.ts
+
+          cat > src/lib/supabase.ts <<'EOF'
+          import { createClient } from '@supabase/supabase-js';
+
+          const url = import.meta.env.VITE_SUPABASE_URL;
+          const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+          export const supabaseConfigured = Boolean(url && anonKey);
+
+          export const supabase = supabaseConfigured
+            ? createClient(url, anonKey)
+            : null;
+          EOF
 
       - name: Build web application
         run: npm run build

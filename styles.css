@@ -395,3 +395,70 @@ button,input,select,textarea{max-width:100%}
 .admin-user-editor .admin-create-form input,.admin-user-editor .admin-create-form textarea,.admin-user-editor .admin-create-form select{width:100%;min-width:0;box-sizing:border-box;padding:11px;border:1px solid #dce5dd;border-radius:10px;background:#fff;color:#1e3027}
 .admin-user-editor .admin-create-form .modal-submit{grid-column:1/-1}
 @media(max-width:560px){.admin-user-editor .admin-create-form{grid-template-columns:1fr}.admin-user-editor{padding:15px}}
+
+
+/* Premium subscription center and official owner-support inbox */
+.subscription-center{margin:18px 0;padding:18px;border:1px solid #d7e7dc;border-radius:24px;background:radial-gradient(circle at 100% 0%,#e0f5e8 0,transparent 40%),linear-gradient(145deg,#fff,#f6fbf7);box-shadow:0 16px 38px #173c2910;overflow:hidden}
+.subscription-heading{display:flex;align-items:flex-start;gap:13px;margin-bottom:18px}
+.subscription-crown{display:grid;place-items:center;flex:0 0 46px;height:46px;border-radius:16px;background:linear-gradient(145deg,#f7e3a8,#d4a94f);color:#263b2c;font-size:26px;box-shadow:0 8px 20px #c6a04a2b}
+.subscription-heading h3{margin:4px 0 5px;font-size:21px;color:#153e2b}
+.subscription-heading p{margin:0;color:#718378;font-size:12px;line-height:1.8}
+.subscription-plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:9px;margin:14px 0}
+.subscription-plan{position:relative;display:flex;flex-direction:column;gap:8px;padding:13px;border:1px solid #dce8df;border-radius:16px;background:#fff;cursor:pointer;transition:transform .18s,border-color .18s,box-shadow .18s}
+.subscription-plan input{position:absolute;top:12px;left:12px;accent-color:#19734c}
+.subscription-plan span{font-size:12px;font-weight:900;color:#2b4a38;padding-left:16px}
+.subscription-plan b{font-size:22px;color:#176747}
+.subscription-plan small{font-size:10px;color:#78897f;line-height:1.5}
+.subscription-plan.selected{border-color:#24835b;background:linear-gradient(145deg,#f0fbf4,#fff);box-shadow:0 0 0 2px #25825b18,0 10px 24px #17674712;transform:translateY(-1px)}
+.payment-method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
+.payment-method{display:flex;align-items:center;gap:10px;padding:12px;text-align:right;border:1px solid #dbe6df;border-radius:15px;background:#fff;color:#244532;min-width:0}
+.payment-method.selected{border-color:#247b53;background:#f0faf4;box-shadow:0 0 0 2px #247b5314}
+.payment-method-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:#e0f3e7;color:#146443;font-size:12px;font-weight:950}
+.payment-method>span:last-child{display:grid;gap:4px;min-width:0}
+.payment-method b{font-size:12px}
+.payment-method small{font-size:10px;color:#7a8c80}
+.payment-destination{position:relative;padding:14px 15px;border-radius:16px;background:linear-gradient(125deg,#173d2d,#1a6344);color:#fff;overflow:hidden}
+.payment-destination:after{content:"";position:absolute;width:120px;height:120px;border:1px solid #ffffff16;border-radius:50%;left:-35px;top:-58px;box-shadow:0 0 0 15px #ffffff08,0 0 0 32px #ffffff05;pointer-events:none}
+.payment-destination>b{display:block;font-size:13px;margin-bottom:10px}
+.payment-destination p{margin:7px 0;font-size:12px;color:#d7e9dd;overflow-wrap:anywhere}
+.payment-destination strong{color:#fff;font-size:13px}
+.payment-destination>small{display:block;margin-top:11px;padding-top:10px;border-top:1px solid #ffffff1c;color:#d4e5da;font-size:11px;line-height:1.8}
+.payment-live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#8df0b2;margin-left:8px;box-shadow:0 0 0 4px #8df0b21a}
+.subscription-payment-form{display:grid;gap:13px;margin-top:15px}
+.subscription-payment-form label,.admin-payment-settings label{display:grid;gap:7px;color:#365243;font-size:12px;font-weight:800}
+.subscription-payment-form label small{font-size:10px;font-weight:500;color:#7e9085}
+.subscription-payment-form input[type=text],.subscription-payment-form input:not([type]),.subscription-payment-form input[type=file]{width:100%;min-width:0;padding:11px;border:1px solid #dce7df;border-radius:12px;background:#fff;font:inherit;font-size:12px}
+.subscription-payment-form input[type=file]{font-size:11px}
+.payment-total-row{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-radius:13px;background:#e9f5ed;color:#45614f;font-size:12px}
+.payment-total-row b{font-size:22px;color:#146744}
+.subscription-history{margin-top:18px;padding-top:15px;border-top:1px solid #e1ebe4}
+.subscription-history h4{margin:0 0 10px;color:#234533}
+.subscription-history-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;padding:12px 0;border-bottom:1px solid #e8efe9}
+.subscription-history-item>div{display:grid;gap:4px}
+.subscription-history-item b{font-size:12px;color:#2d4c3a}
+.subscription-history-item small,.subscription-history-item p{font-size:10px;color:#7a8c80;margin:0;overflow-wrap:anywhere}
+.payment-status{align-self:start;padding:5px 8px;border-radius:20px;background:#fff0d4;color:#94630e;font-size:10px;font-weight:900}
+.payment-status.approved{background:#dff6e7;color:#176744}
+.payment-status.rejected{background:#ffe7e7;color:#a23b3b}
+.support-chat-card{border:1px solid #d7e7dc;border-radius:18px;overflow:hidden;background:linear-gradient(145deg,#f8fcf9,#fff)}
+.support-chat-header{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(120deg,#153c2c,#1c6546);color:#fff}
+.support-emblem{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#ffffff16;color:#d8f4df}
+.support-chat-header>div{display:grid;gap:5px}
+.support-chat-header b{font-size:13px}
+.support-chat-header small{font-size:10px;color:#d2e5d8;line-height:1.6}
+.support-message-list{display:flex;flex-direction:column;gap:10px;min-height:230px;max-height:420px;overflow-y:auto;padding:13px;background:#f7faf8}
+.admin-support-center{padding:6px 0}
+.admin-support-center>p{font-size:12px;color:#7a8c80;line-height:1.8}
+.admin-support-layout{display:grid;gap:12px}
+.admin-support-people{display:grid;gap:7px;align-content:start;max-height:340px;overflow-y:auto}
+.admin-support-people>button{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e0e9e3;border-radius:13px;background:#fff;text-align:right;color:#244532}
+.admin-support-people>button.selected{border-color:#247b53;background:#eff9f2}
+.admin-support-people>button>span:last-child{display:grid;gap:4px;min-width:0}
+.admin-support-people b{font-size:12px}
+.admin-support-people small{font-size:10px;color:#7a8c80}
+.admin-payment-settings{display:grid;gap:12px;padding:14px;margin:10px 0;border:1px solid #e2e9e4;border-radius:15px;background:#f7faf8}
+.admin-payment-settings h5{margin:0;color:#254b36;font-size:13px}
+.admin-payment-settings input,.admin-payment-settings textarea{min-width:0;width:100%;padding:10px;border:1px solid #dce7df;border-radius:11px;background:#fff;font:inherit;font-size:12px}
+.admin-payment-settings>small{font-size:10px;color:#9b6a24;line-height:1.7}
+@media(min-width:700px){.admin-support-layout{grid-template-columns:minmax(190px,.8fr) minmax(0,1.5fr)}.subscription-center{padding:22px}.subscription-heading h3{font-size:24px}}
+@media(max-width:390px){.subscription-center{padding:12px;border-radius:18px}.payment-method-grid{grid-template-columns:1fr}.subscription-plan-grid{grid-template-columns:1fr}.subscription-plan{padding:11px}.subscription-plan b{font-size:20px}}

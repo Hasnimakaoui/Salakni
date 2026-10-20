@@ -176,7 +176,7 @@ export default function App() {
     let cancelled = false;
     const loadAdmin = async () => {
       const [users, services, requests, reports, audit, payments, categoriesRows, adsRows, settingsRows] = await Promise.all([
-        supabase.from('profiles').select('id,display_name,phone,city,wilaya,role,is_verified,subscription_active,subscription_ends_at,subscription_plan,is_suspended,suspension_reason,created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(200),
+        supabase.from('profiles').select('id,display_name,phone,city,wilaya,bio,avatar_url,role,is_verified,subscription_active,subscription_ends_at,subscription_plan,is_suspended,suspension_reason,created_at', { count: 'exact' }).order('created_at', { ascending: false }).limit(200),
         supabase.from('professional_services').select('id,professional_id,title,category,description,wilaya,city,is_active,starting_price_dzd,created_at').order('created_at', { ascending: false }).limit(200),
         supabase.from('service_requests').select('id,customer_id,professional_id,title,details,status,created_at,preferred_at').order('created_at', { ascending: false }).limit(200),
         supabase.from('reports').select('id,reason,status,created_at,reported_profile_id,request_id').in('status', ['open','reviewing']).order('created_at', { ascending: false }).limit(100),

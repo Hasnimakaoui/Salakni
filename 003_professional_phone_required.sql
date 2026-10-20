@@ -13,7 +13,7 @@ begin
     if new.role = 'professional' and nullif(btrim(new.phone), '') is null then
       raise exception 'Professional phone number is required';
     end if;
-    if new.role = 'professional' and btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9} then then
+    if new.role = 'professional' and btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9}$' then
       raise exception 'Enter a valid Algerian phone number';
     end if;
     return new;
@@ -35,7 +35,7 @@ begin
       raise exception 'Professional phone number is fixed and cannot be changed';
     end if;
     if nullif(btrim(old.phone), '') is null and nullif(btrim(new.phone), '') is not null
-       and btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9} then then
+       and btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9}$' then
       raise exception 'Enter a valid Algerian phone number';
     end if;
     if nullif(btrim(old.phone), '') is null and nullif(btrim(new.phone), '') is null then

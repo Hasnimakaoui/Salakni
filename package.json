@@ -10,10 +10,10 @@
     "android:add": "cap add android",
     "android:sync": "npm run build && cap sync android",
     "android:open": "cap open android",
-    "check:migrations": "node scripts/check-migrations.mjs",
-    "check:app": "node scripts/check-app.mjs",
+    "check:migrations": "node check-migrations.mjs",
+    "check:app": "node check-app.mjs",
     "check": "npm run check:app && npm run check:migrations && npm run check:workflow",
-    "check:workflow": "node scripts/check-workflow.mjs"
+    "check:workflow": "node check-workflow.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",

@@ -327,7 +327,23 @@ export default function App() {
     const load=async()=>{
       const {data,error}=await supabase!.from('professional_support_messages').select('id,professional_id,sender_id,body,created_at,read_at').order('created_at',{ascending:true}).limit(1000);
       if(cancelled)return;
-      if(error)setNotice('تعذر تحميل رسائل الحرفيين: '+error.message); else setAdminSupportMessages(data||[]);
+      if(error){setNotice('تعذر تحميل رسائل الحرفيين: '+error.message);return;}
+      const rows=data||[];
+      setAdminSupportMessages(rows);
+      // Keep the owner inbox usable even if the admin users list has not refreshed yet.
+      const threadIds=[...new Set(rows.map(m=>m.professional_id).filter(Boolean))];
+      if(threadIds.length){
+        const {data:threads,error:threadsError}=await supabase!.from('profiles').select('id,display_name,professional_name,phone,role').in('id',threadIds);
+        if(!cancelled&&!threadsError&&threads){
+          // Merge thread participants into the existing admin list without discarding other admin records.
+          setAdminUsers(current=>{
+            const byId=new Map(current.map(u=>[u.id,u]));
+            threads.forEach(u=>byId.set(u.id,{...byId.get(u.id),...u}));
+            return [...byId.values()];
+          });
+          if(!selectedSupportProfessionalId)setSelectedSupportProfessionalId(threadIds[0]);
+        }
+      }
     };
     void load();
     const channel=supabase.channel('salakni-owner-support-admin').on('postgres_changes',{event:'*',schema:'public',table:'professional_support_messages'},()=>{void load();}).subscribe();

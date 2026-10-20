@@ -33,3 +33,9 @@
 .admin-dashboard small{overflow-wrap:anywhere}
 .admin-dashboard .request-card p{overflow-wrap:anywhere}
 @media(min-width:600px){.admin-stat-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+.live-ad-list{padding-top:0}
+.live-ad-card{padding:14px;margin:8px 0;border-radius:14px;background:linear-gradient(135deg,#f9f0d6,#fff);border:1px solid #e9d7a5}
+.live-ad-card b{font-size:14px;color:#765319}
+.live-ad-card p{font-size:12px;line-height:1.7;color:#5e6254;margin:7px 0}
+.live-ad-card a{font-size:12px;font-weight:700;color:#155c42}

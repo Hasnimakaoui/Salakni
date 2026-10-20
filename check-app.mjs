@@ -14,6 +14,9 @@ const checks = [
   ['owner can edit professional phone', /saveAdminUserFull[\s\S]{0,700}phone=String\(d\.phone\|\|''\)\.trim\(\)\.replace\(\/\[\\s-\]\/g,''\)/],
   ['public directory uses restricted RPC', /rpc\('get_professional_directory'\)/],
   ['directory load errors are surfaced', /get_professional_directory'\)\.then\(\(\{ data, error \}\) => \{\s*if \(error\) \{ setNotice\(/],
+  ['booking requires at least 48 hours lead time', /requestDate[\s\S]{0,160}Date\.now\(\) \+ 48 \* 60 \* 60 \* 1000/],
+  ['cancellation requires a reason', /status === 'cancelled'[\s\S]{0,180}trim\(\)\.length < 5/],
+  ['cancellation modal is present', /aria-label=\"إلغاء طلب الخدمة\"[\s\S]{0,500}سبب الإلغاء/],
 ];
 let failed = false;
 for (const [label, pattern] of checks) {

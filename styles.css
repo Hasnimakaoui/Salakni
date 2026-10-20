@@ -379,3 +379,9 @@ button,input,select,textarea{max-width:100%}
 .location-panel-footer button{border:0;background:transparent;color:#9a7130;font-size:10px;font-weight:800;white-space:nowrap}
 .apply-location-button{width:100%;min-height:44px;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:12px;background:linear-gradient(105deg,#173e39,#235d49);color:#fff;font-size:11px;font-weight:900}
 @media(max-width:390px){.location-panel{padding:14px 14px 13px}.location-panel-head b{font-size:12px}.location-panel-head small{font-size:9px}.location-select-grid{gap:7px}.location-select-grid select,.location-select-grid input{padding-inline:7px;font-size:11px}.location-panel-footer span{font-size:8px}.location-pill{padding:8px}.location-pill span{max-width:115px}}
+
+
+/* Required, fixed professional phone field */
+.required-phone-mark{display:inline-flex;align-items:center;margin-inline-start:6px;padding:3px 7px;border-radius:999px;background:#fff2d7;color:#91651b;font-size:10px;font-weight:900;vertical-align:middle}
+.phone-field-hint{display:block;margin-top:5px;color:#738579;font-size:10px;line-height:1.8}
+.professional-form-card label input[readonly]{background:#eef4ef;color:#456153;border-color:#dce8df;cursor:not-allowed}

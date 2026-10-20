@@ -4,10 +4,11 @@ import { strict as assert } from 'node:assert';
 const workflow = readFileSync('.github/workflows/android-build.yml', 'utf8');
 const required = [
   ['manual build trigger', /workflow_dispatch:/],
-  ['push build trigger for main', /push:\s*\n\s*branches:\s*\[main\]/],
+  ['push build trigger for main', /push:\s*\n\s*branches:\s*\n\s*-\s*main/],
   ['Node setup', /uses:\s*actions\/setup-node@v4/],
   ['Java setup', /uses:\s*actions\/setup-java@v4/],
-  ['Android SDK setup', /uses:\s*android-actions\/setup-android@v3/],
+  ['Android SDK discovery', /name:\s*Locate Android SDK/],
+  ['Android SDK packages', /name:\s*Install Android SDK packages/],
   ['project checks before build', /npm run check/],
   ['web production build', /npm run build/],
   ['Capacitor Android project generation', /npx cap add android/],
@@ -32,6 +33,7 @@ const build = workflow.indexOf('npm run build');
 const apk = workflow.indexOf('assembleDebug');
 const verify = workflow.indexOf('test -s android/app/build/outputs/apk/debug/app-debug.apk');
 const upload = workflow.indexOf('actions/upload-artifact@v4');
-assert.ok(checks < build && build < apk && apk < verify && verify < upload,
-  'Workflow steps must run checks, web build, APK assembly, APK verification, then artifact upload in order');
+const release = workflow.indexOf('softprops/action-gh-release@v2');
+assert.ok(checks < build && build < apk && apk < verify && verify < upload && upload < release,
+  'Workflow order must be checks, web build, APK assembly, verification, artifact upload, then release publishing');
 console.log(`Validated ${required.length} Android workflow requirements and step ordering.`);

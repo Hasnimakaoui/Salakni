@@ -66,6 +66,95 @@ grant execute on function public.get_professional_directory() to anon, authentic
 
 drop view if exists public.professional_directory;
 
+-- Enforce phone validity on creation, role conversion, and phone edits.
+create or replace function public.guard_professional_phone()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $
+declare actor_is_owner boolean := false;
+begin
+  if auth.uid() is not null then
+    select exists(select 1 from public.profiles actor where actor.id=auth.uid() and actor.role='owner')
+      into actor_is_owner;
+  end if;
+  if tg_op = 'INSERT' then
+    if new.role = 'professional' and nullif(btrim(new.phone), '') is null then
+      raise exception 'Professional phone number is required';
+    end if;
+    if new.role = 'professional' and btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9}revoke all on function public.audit_service_request_status() from public, anon, authenticated;
+revoke all on function public.guard_report_review_updates() from public, anon, authenticated;
+revoke all on function public.audit_report_review() from public, anon, authenticated;
+revoke all on function public.guard_service_request_identity() from public, anon, authenticated;
+revoke all on function public.ensure_request_conversation() from public, anon, authenticated;
+revoke all on function public.guard_service_request_updates() from public, anon, authenticated;
+revoke all on function public.prevent_profile_role_escalation() from public, anon, authenticated;
+revoke all on function public.require_phone_for_professional_service() from public, anon, authenticated;
+revoke all on function public.guard_professional_phone() from public, anon, authenticated;
+revoke all on function public.audit_owner_admin_changes() from public, anon, authenticated;
+
+-- These helpers are available only to authenticated policy evaluation/admin UI.
+revoke all on function public.is_owner() from public, anon;
+grant execute on function public.is_owner() to authenticated;
+revoke all on function public.is_moderator_or_owner() from public, anon;
+grant execute on function public.is_moderator_or_owner() to authenticated;
+revoke all on function public.owner_delete_account(uuid) from public, anon;
+grant execute on function public.owner_delete_account(uuid) to authenticated;
+revoke all on function public.review_subscription_payment(uuid, boolean, text) from public, anon;
+grant execute on function public.review_subscription_payment(uuid, boolean, text) to authenticated;
+ then
+      raise exception 'Enter a valid Algerian phone number';
+    end if;
+    return new;
+  end if;
+  if new.id is distinct from old.id or new.created_at is distinct from old.created_at then
+    raise exception 'Profile identity and creation time are immutable';
+  end if;
+  if auth.uid() is not null and coalesce(auth.jwt()->>'role','') <> 'service_role' and not actor_is_owner then
+    if new.role is distinct from old.role or new.is_verified is distinct from old.is_verified then
+      raise exception 'Changing account role or verification is not allowed';
+    end if;
+  end if;
+  if new.role = 'professional' and
+     (new.phone is distinct from old.phone or new.role is distinct from old.role) then
+    if nullif(btrim(new.phone), '') is null then
+      raise exception 'Professional phone number is required';
+    end if;
+    if btrim(new.phone) !~ '^([+]213|0)[0-9]{8,9}revoke all on function public.audit_service_request_status() from public, anon, authenticated;
+revoke all on function public.guard_report_review_updates() from public, anon, authenticated;
+revoke all on function public.audit_report_review() from public, anon, authenticated;
+revoke all on function public.guard_service_request_identity() from public, anon, authenticated;
+revoke all on function public.ensure_request_conversation() from public, anon, authenticated;
+revoke all on function public.guard_service_request_updates() from public, anon, authenticated;
+revoke all on function public.prevent_profile_role_escalation() from public, anon, authenticated;
+revoke all on function public.require_phone_for_professional_service() from public, anon, authenticated;
+revoke all on function public.guard_professional_phone() from public, anon, authenticated;
+revoke all on function public.audit_owner_admin_changes() from public, anon, authenticated;
+
+-- These helpers are available only to authenticated policy evaluation/admin UI.
+revoke all on function public.is_owner() from public, anon;
+grant execute on function public.is_owner() to authenticated;
+revoke all on function public.is_moderator_or_owner() from public, anon;
+grant execute on function public.is_moderator_or_owner() to authenticated;
+revoke all on function public.owner_delete_account(uuid) from public, anon;
+grant execute on function public.owner_delete_account(uuid) to authenticated;
+revoke all on function public.review_subscription_payment(uuid, boolean, text) from public, anon;
+grant execute on function public.review_subscription_payment(uuid, boolean, text) to authenticated;
+ then
+      raise exception 'Enter a valid Algerian phone number';
+    end if;
+  end if;
+  if auth.uid() = old.id and old.role = 'professional' and not actor_is_owner then
+    if nullif(btrim(old.phone), '') is not null and new.phone is distinct from old.phone then
+      raise exception 'Professional phone number is fixed and cannot be changed';
+    end if;
+  end if;
+  new.updated_at := now();
+  return new;
+end;
+$;
+
 -- Trigger functions are only for triggers, never direct RPC calls.
 revoke all on function public.audit_service_request_status() from public, anon, authenticated;
 revoke all on function public.guard_report_review_updates() from public, anon, authenticated;

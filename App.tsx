@@ -282,7 +282,7 @@ export default function App() {
       const patch: Record<string, any> = { display_name: name, bio: profileBio.trim() || null };
       if (current.role === 'professional' && !String(current.phone || '').trim()) {
         const phone = profilePhone.trim();
-        if (!/^((\\+213|0)[0-9]{8,9})$/.test(phone.replace(/[\\s-]/g,''))) { setNotice('رقم الهاتف للحرفي إلزامي. أدخل رقمًا جزائريًا صحيحًا، ولا يمكن تغييره بعد حفظه.'); return; }
+        if (!/^((\+213|0)[0-9]{8,9})$/.test(phone.replace(/[\s-]/g,''))) { setNotice('رقم الهاتف للحرفي إلزامي. أدخل رقمًا جزائريًا صحيحًا، ولا يمكن تغييره بعد حفظه.'); return; }
         patch.phone = phone.replace(/[\\s-]/g,'');
       }
       const { error } = await supabase.from('profiles').update(patch).eq('id', session.user.id);

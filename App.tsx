@@ -288,6 +288,104 @@ export default function App() {
     } catch (err) { setNotice(err instanceof Error ? err.message : 'تعذر إرسال الرسالة.'); }
     finally { setBusy(false); }
   };
+
+  const paymentAmount = (plan: string) => Number(paymentSettings[plan === 'pro_monthly' ? 'price_pro_monthly' : plan === 'pro_yearly' ? 'price_pro_yearly' : 'price_monthly'] || (plan === 'pro_monthly' ? 1500 : plan === 'pro_yearly' ? 13000 : 1000));
+  useEffect(() => {
+    if (!supabase) return;
+    let cancelled = false;
+    const loadPublicSettings = async () => {
+      const { data, error } = await supabase.from('app_settings').select('key,value');
+      if (cancelled || error || !data) return;
+      const values = Object.fromEntries(data.map((row:any) => [row.key, row.value]));
+      setPaymentSettings(current => ({ ...current, ...values }));
+    };
+    void loadPublicSettings();
+    if (session?.user?.id) {
+      void supabase.from('subscription_payments').select('id,plan_code,amount_dzd,transfer_reference,receipt_path,status,submitted_at,admin_note,subscription_ends_at').eq('user_id',session.user.id).order('submitted_at',{ascending:false}).limit(30).then(({data,error})=>{
+        if (cancelled) return;
+        if (error) setNotice('تعذر تحميل سجل الاشتراكات: '+error.message); else setMyPayments(data||[]);
+      });
+    } else setMyPayments([]);
+    return () => { cancelled = true; };
+  }, [session?.user?.id, adminRefreshKey]);
+  useEffect(() => {
+    if (!supabase || !session?.user?.id || profileRole !== 'professional') { setSupportMessages([]); return; }
+    let cancelled = false;
+    const load = async () => {
+      const {data,error}=await supabase!.from('professional_support_messages').select('id,professional_id,sender_id,body,created_at,read_at').eq('professional_id',session.user.id).order('created_at',{ascending:true}).limit(300);
+      if(cancelled)return;
+      if(error) setNotice('تعذر تحميل محادثة المالك: '+error.message);
+      else setSupportMessages(data||[]);
+    };
+    void load();
+    const channel=supabase.channel('salakni-owner-support-'+session.user.id).on('postgres_changes',{event:'*',schema:'public',table:'professional_support_messages',filter:'professional_id=eq.'+session.user.id},()=>{void load();}).subscribe();
+    return ()=>{cancelled=true;void supabase?.removeChannel(channel);};
+  }, [session?.user?.id,profileRole]);
+  useEffect(() => {
+    if (!supabase || !session?.user?.id || profileRole !== 'owner') { setAdminSupportMessages([]); return; }
+    let cancelled=false;
+    const load=async()=>{
+      const {data,error}=await supabase!.from('professional_support_messages').select('id,professional_id,sender_id,body,created_at,read_at').order('created_at',{ascending:true}).limit(1000);
+      if(cancelled)return;
+      if(error)setNotice('تعذر تحميل رسائل الحرفيين: '+error.message); else setAdminSupportMessages(data||[]);
+    };
+    void load();
+    const channel=supabase.channel('salakni-owner-support-admin').on('postgres_changes',{event:'*',schema:'public',table:'professional_support_messages'},()=>{void load();}).subscribe();
+    return ()=>{cancelled=true;void supabase?.removeChannel(channel);};
+  }, [session?.user?.id,profileRole,adminRefreshKey]);
+  const submitSubscriptionPayment = async (e: FormEvent) => {
+    e.preventDefault();
+    if(!supabase || !session?.user || !['customer','professional'].includes(profileRole)){setNotice('سجّل الدخول بحساب زبون أو حرفي لإرسال طلب الاشتراك.');return;}
+    const reference=transferReference.trim();
+    if(reference.length<4){setNotice('أدخل رقم العملية أو مرجع التحويل الصحيح.');return;}
+    if(!receiptFile){setNotice('أرفق صورة أو ملف PDF لإثبات الدفع.');return;}
+    if(receiptFile.size>5*1024*1024){setNotice('حجم الإيصال يجب ألا يتجاوز 5 ميغابايت.');return;}
+    if(!['image/jpeg','image/png','image/webp','application/pdf'].includes(receiptFile.type)){setNotice('الأنواع المقبولة: JPG أو PNG أو WEBP أو PDF.');return;}
+    if(myPayments.some(p=>p.status==='pending')){setNotice('لديك طلب دفع قيد المراجعة. انتظر قرار المالك قبل إرسال طلب جديد.');return;}
+    setBusy(true);setNotice('');
+    let uploadedPath='';
+    try{
+      const ext=receiptFile.type==='application/pdf'?'pdf':receiptFile.type==='image/png'?'png':receiptFile.type==='image/webp'?'webp':'jpg';
+      uploadedPath=session.user.id+'/'+Date.now()+'-'+crypto.randomUUID()+'.'+ext;
+      const {error:uploadError}=await supabase.storage.from('subscription-receipts').upload(uploadedPath,receiptFile,{contentType:receiptFile.type,upsert:false});
+      if(uploadError)throw uploadError;
+      const amount=paymentAmount(paymentPlan);
+      const {data,error}=await supabase.from('subscription_payments').insert({user_id:session.user.id,account_type:profileRole,plan_code:paymentPlan,amount_dzd:amount,transfer_reference:reference,receipt_path:uploadedPath,status:'pending'}).select('id,plan_code,amount_dzd,transfer_reference,receipt_path,status,submitted_at,admin_note,subscription_ends_at').single();
+      if(error)throw error;
+      setMyPayments(rows=>[data,...rows]);setTransferReference('');setReceiptFile(null);setAdminRefreshKey(v=>v+1);
+      const fileInput=document.getElementById('subscription-receipt-file') as HTMLInputElement|null;if(fileInput)fileInput.value='';
+      setNotice('تم إرسال إثبات الدفع بنجاح. سيبقى الاشتراك قيد الانتظار حتى يتحقق المالك من الإيصال والعملية.');
+    }catch(err){
+      if(uploadedPath) await supabase.storage.from('subscription-receipts').remove([uploadedPath]);
+      setNotice(err instanceof Error?err.message:'تعذر إرسال إثبات الدفع. تحقق من الاتصال وحاول مجددًا.');
+    }finally{setBusy(false);}
+  };
+  const sendProfessionalSupportMessage = async (e:FormEvent) => {
+    e.preventDefault();const body=supportDraft.trim();
+    if(!supabase||!session?.user||profileRole!=='professional'||body.length<1)return;
+    setBusy(true);setNotice('');
+    try{
+      const {data,error}=await supabase.from('professional_support_messages').insert({professional_id:session.user.id,sender_id:session.user.id,body}).select('id,professional_id,sender_id,body,created_at,read_at').single();
+      if(error)throw error;
+      setSupportMessages(rows=>rows.some(m=>m.id===data.id)?rows:[...rows,data]);setSupportDraft('');
+    }catch(err){setNotice(err instanceof Error?err.message:'تعذر إرسال الرسالة إلى المالك.');}finally{setBusy(false);}
+  };
+  const sendOwnerSupportMessage = async (e:FormEvent) => {
+    e.preventDefault();const body=adminSupportDraft.trim();
+    if(!supabase||!session?.user||profileRole!=='owner'||!selectedSupportProfessionalId||!body)return;
+    setBusy(true);setNotice('');
+    try{
+      const {data,error}=await supabase.from('professional_support_messages').insert({professional_id:selectedSupportProfessionalId,sender_id:session.user.id,body}).select('id,professional_id,sender_id,body,created_at,read_at').single();
+      if(error)throw error;
+      setAdminSupportMessages(rows=>rows.some(m=>m.id===data.id)?rows:[...rows,data]);setAdminSupportDraft('');
+    }catch(err){setNotice(err instanceof Error?err.message:'تعذر إرسال رد المالك.');}finally{setBusy(false);}
+  };
+  const openPaymentReceipt = async (payment:any) => {
+    if(!supabase||!payment.receipt_path)return;
+    const {data,error}=await supabase.storage.from('subscription-receipts').createSignedUrl(payment.receipt_path,120);
+    if(error||!data?.signedUrl){setNotice('تعذر فتح الإيصال. تحقق من صلاحية الوصول إلى الملف.');return;}
+    window.open(data.signedUrl,'_blank','noopener,noreferrer');
+  };
   useEffect(() => {
     try { localStorage.setItem('salakni-favorites', JSON.stringify(favorites)); } catch { /* storage may be disabled */ }
   }, [favorites]);

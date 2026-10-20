@@ -211,3 +211,88 @@ button,input,select,textarea{max-width:100%}
     margin-top:18px;
   }
 }
+
+
+/* Owner-only premium command center: visually independent from the customer app */
+.owner-command-center{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  margin:24px -2px 8px;
+  padding:18px;
+  border:1px solid #344454;
+  border-radius:26px;
+  color:#edf4fb;
+  background:
+    radial-gradient(ellipse at 100% 0%,#b78b3d24 0,transparent 34%),
+    radial-gradient(ellipse at 0% 100%,#2c6c7940 0,transparent 38%),
+    linear-gradient(145deg,#101a2b 0%,#172538 48%,#0d1727 100%);
+  box-shadow:0 24px 55px #101b2c24,inset 0 1px 0 #ffffff12;
+}
+.owner-command-center:before{
+  content:'';
+  position:absolute;
+  z-index:-1;
+  width:230px;height:230px;
+  left:-105px;top:-125px;
+  border:1px solid #d9b76b30;
+  border-radius:50%;
+  box-shadow:0 0 0 22px #d9b76b08,0 0 0 48px #d9b76b06;
+  pointer-events:none;
+}
+.owner-console-header{display:flex;align-items:center;gap:12px;padding:4px 0 20px;border-bottom:1px solid #ffffff16;min-width:0}
+.owner-emblem{width:54px;height:54px;flex:0 0 54px;display:grid;place-items:center;border:1px solid #e7c77c66;border-radius:18px;color:#f3d58e;background:linear-gradient(145deg,#f3d58e24,#e8b95508);box-shadow:inset 0 1px 0 #ffffff1c,0 8px 25px #0002}
+.owner-console-title{flex:1;min-width:0}
+.owner-console-title>span{display:block;font-family:system-ui,sans-serif;font-size:8px;font-weight:900;letter-spacing:1.8px;color:#d9bb75;overflow-wrap:anywhere}
+.owner-console-title h3{margin:4px 0 2px!important;color:#fff;font-size:21px;font-weight:900;letter-spacing:-.5px}
+.owner-console-title p{margin:0;color:#aebdce;font-size:10px;line-height:1.8}
+.owner-live-pill{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;padding:7px 9px;border:1px solid #3d806c66;border-radius:999px;background:#1a59472b;color:#9ce2c0;font-size:9px;font-weight:800;white-space:nowrap}
+.owner-live-pill i{width:6px;height:6px;border-radius:50%;background:#62e0a1;box-shadow:0 0 0 4px #62e0a11a}
+.owner-command-center .admin-stat-grid{gap:10px;margin-top:16px}
+.owner-command-center .admin-stat-grid>div{position:relative;overflow:hidden;gap:7px;min-height:96px;padding:15px 13px;border:1px solid #ffffff12;border-radius:17px;background:linear-gradient(145deg,#ffffff0d,#ffffff04);box-shadow:inset 0 1px 0 #ffffff08}
+.owner-command-center .admin-stat-grid>div:after{content:'';position:absolute;inset:auto -18px -31px auto;width:75px;height:75px;border:1px solid #d8b56b20;border-radius:50%;box-shadow:0 0 0 12px #d8b56b05}
+.owner-command-center .admin-stat-grid b{position:relative;z-index:1;color:#f2d28a;font-size:28px;line-height:1.2;font-weight:900;font-variant-numeric:tabular-nums}
+.owner-command-center .admin-stat-grid span{position:relative;z-index:1;color:#b8c6d5;font-size:10px}
+.owner-command-center .admin-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:17px 0 20px;padding:0 0 18px;border-bottom:1px solid #ffffff16;overflow:visible}
+.owner-command-center .admin-nav button{min-width:0;white-space:normal;text-align:center;min-height:42px;padding:10px 8px;border:1px solid #ffffff15;border-radius:13px;background:#ffffff08;color:#c6d2df;font-size:11px;font-weight:800;transition:background .2s,border-color .2s,transform .2s}
+.owner-command-center .admin-nav button.admin-nav-active{background:linear-gradient(135deg,#f0d48f,#bd8d3d);border-color:#f2d797;color:#192337;box-shadow:0 7px 18px #c59b4b2b}
+.owner-command-center .admin-nav button:active{transform:scale(.98)}
+.owner-command-center h4{margin:20px 0 11px;font-size:14px;color:#f1d18a}
+.owner-command-center>div:not(.owner-console-header):not(.admin-stat-grid):not(.admin-nav){min-width:0}
+.owner-command-center p{color:#c1ccda;font-size:12px;line-height:1.9}
+.owner-command-center .request-card,.owner-command-center .audit-log-item{border:1px solid #ffffff15;background:linear-gradient(145deg,#ffffff0c,#ffffff05);border-radius:15px;color:#edf4fb}
+.owner-command-center .request-card b,.owner-command-center .audit-log-item b{color:#f5f7fa}
+.owner-command-center .request-card p,.owner-command-center .audit-log-item p{color:#bdc9d7}
+.owner-command-center .request-card small,.owner-command-center .audit-log-item small{color:#96a9bd;overflow-wrap:anywhere}
+.owner-command-center .request-status{background:#2d6b55;color:#b8f0d1;white-space:normal}
+.owner-command-center .admin-search,.owner-command-center .admin-inline-controls select,.owner-command-center .admin-create-form input,.owner-command-center .admin-create-form textarea,.owner-command-center .admin-create-form select,.owner-command-center input[type="number"]{background:#101c2d;border-color:#3a4a5e;color:#f3f6fa;border-radius:11px}
+.owner-command-center .admin-search::placeholder,.owner-command-center .admin-create-form input::placeholder,.owner-command-center .admin-create-form textarea::placeholder{color:#8294a9}
+.owner-command-center .admin-inline-controls label,.owner-command-center .admin-create-form label{color:#c4d0de}
+.owner-command-center .admin-create-form{background:#ffffff08;border-color:#ffffff15;border-radius:15px}
+.owner-command-center button:not(.admin-nav button){transition:filter .15s,transform .15s}
+.owner-command-center button:not(.admin-nav button):hover{filter:brightness(1.08)}
+.owner-command-center button:disabled{opacity:.55}
+.owner-command-center .admin-note{background:#473a20;color:#f4d68c}
+.owner-command-center .admin-dashboard button,.owner-command-center .admin-create-form button,.owner-command-center .request-actions button{background:linear-gradient(135deg,#f0d48f,#bd8d3d);color:#192337}
+.owner-command-center .admin-dashboard button.secondary-action,.owner-command-center .request-actions .secondary-action{background:#5a343b;color:#ffd3d5}
+.owner-command-center .audit-log-item span{background:#243a4e;color:#c6d9eb}
+.owner-command-center .audit-log-empty{background:#ffffff08;color:#a9b8c8}
+@media(min-width:600px){
+  .owner-command-center{padding:23px;border-radius:30px}
+  .owner-console-header{padding-bottom:22px}
+  .owner-command-center .admin-nav{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .owner-command-center .admin-stat-grid>div{min-height:106px;padding:18px}
+}
+@media(max-width:390px){
+  .owner-command-center{margin-inline:-4px;padding:13px;border-radius:21px}
+  .owner-console-header{align-items:flex-start;gap:9px;flex-wrap:wrap}
+  .owner-emblem{width:45px;height:45px;flex-basis:45px;border-radius:15px}
+  .owner-console-title h3{font-size:18px}
+  .owner-console-title>span{font-size:7px;letter-spacing:1px}
+  .owner-live-pill{margin-right:54px;margin-top:-4px}
+  .owner-command-center .admin-stat-grid{gap:7px}
+  .owner-command-center .admin-stat-grid>div{min-height:83px;padding:11px 9px}
+  .owner-command-center .admin-stat-grid b{font-size:23px}
+  .owner-command-center .admin-nav{gap:6px}
+  .owner-command-center .admin-nav button{font-size:10px;padding:9px 5px}
+}

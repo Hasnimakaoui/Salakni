@@ -10,7 +10,8 @@ declare
   expected_amount integer;
   expected_key text;
 begin
-  if tg_op <> 'INSERT' then
+  if tg_op = 'UPDATE' then
+    if public.is_moderator_or_owner() then return new; end if;
     raise exception 'Subscription payment requests cannot be edited by clients';
   end if;
   if auth.uid() is null or new.user_id <> auth.uid() then

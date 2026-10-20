@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - fix/subscription-ui-mobile
 
 permissions:
   contents: read

@@ -282,7 +282,7 @@ export default function App() {
       const patch: Record<string, any> = { display_name: name, bio: profileBio.trim() || null };
       if (current.role === 'professional' && !String(current.phone || '').trim()) {
         const phone = profilePhone.trim();
-        if (!/^((\+213|0)[0-9]{8,9})$/.test(phone.replace(/[\s-]/g,''))) { setNotice('رقم الهاتف للحرفي إلزامي. أدخل رقمًا جزائريًا صحيحًا، ولا يمكن تغييره بعد حفظه.'); return; }
+        if (!/^(([+]213|0)[0-9]{8,9})$/.test(phone.replace(/[\s-]/g,''))) { setNotice('رقم الهاتف للحرفي إلزامي. أدخل رقمًا جزائريًا صحيحًا، ولا يمكن تغييره بعد حفظه.'); return; }
         patch.phone = phone.replace(/[\\s-]/g,'');
       }
       const { error } = await supabase.from('profiles').update(patch).eq('id', session.user.id);
@@ -322,8 +322,8 @@ export default function App() {
     setBusy(true);
     try {
       if (authMode === 'signup') {
-        const normalizedPhone = authPhone.trim().replace(/[\\s-]/g,'');
-        if (accountType === 'professional' && !/^((\\+213|0)[0-9]{8,9})$/.test(normalizedPhone)) { setNotice('رقم الهاتف إلزامي للحرفي. أدخل رقمًا جزائريًا صحيحًا مثل 0550123456.'); return; }
+        const normalizedPhone = authPhone.trim().replace(/[\s-]/g,'');
+        if (accountType === 'professional' && !/^(([+]213|0)[0-9]{8,9})$/.test(normalizedPhone)) { setNotice('رقم الهاتف إلزامي للحرفي. أدخل رقمًا جزائريًا صحيحًا مثل 0550123456.'); return; }
         const { data, error } = await supabase.auth.signUp({ email: authEmail.trim(), password: authPassword, options: { data: { display_name: authName.trim(), account_type: accountType, ...(accountType === 'professional' ? { phone: normalizedPhone } : {}) } } });
         if (error) throw error;
         if (data.session && data.user) await ensureProfile(data.user, authName.trim());

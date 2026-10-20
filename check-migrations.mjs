@@ -10,6 +10,7 @@ const files = [
   '006_secure_owner_profile_policy.sql',
   '007_owner_profile_policy_cleanup.sql',
   '008_public_directory_rpc_and_security_grants.sql',
+  '009_request_cancellation_rules.sql',
 ];
 const required = new Map([
   ['001_initial_schema.sql', ['enable row level security', 'customers create requests', 'participants send messages', 'ensure_request_conversation']],
@@ -20,6 +21,7 @@ const required = new Map([
   ['006_secure_owner_profile_policy.sql', ['owner full profile management', 'current_user_is_owner']],
   ['007_owner_profile_policy_cleanup.sql', ['public.is_owner()', 'drop function if exists public.current_user_is_owner()']],
   ['008_public_directory_rpc_and_security_grants.sql', ['get_professional_directory', 'p.subscription_active', 'p.is_verified', 'not p.is_suspended', 'revoke all on function public.guard_professional_phone() from public, anon, authenticated']],
+  ['009_request_cancellation_rules.sql', ['cancellation_reason', 'at least five characters', "new.status in ('in_progress','completed','cancelled')"]],
 ]);
 
 let failed = false;

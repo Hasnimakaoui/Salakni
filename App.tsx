@@ -136,7 +136,7 @@ export default function App() {
       if (!profile) {
         try {
           await ensureProfile(session.user, session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'مستخدم سلكني');
-          const refreshed = await supabase.from('profiles').select('role,display_name,bio,is_suspended').eq('id', session.user.id).maybeSingle();
+          const refreshed = await supabase.from('profiles').select('role,display_name,bio,phone,is_suspended').eq('id', session.user.id).maybeSingle();
           if (refreshed.error) throw refreshed.error;
           profile = refreshed.data;
         } catch (error) {

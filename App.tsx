@@ -111,7 +111,7 @@ export default function App() {
     if (!supabase || !session?.user) { setMyRequests([]); setIncomingRequests([]); setProfileRole('customer'); return; }
     let cancelled = false;
     const loadAccountData = async () => {
-      let { data: profile, error: profileError } = await supabase.from('profiles').select('role,display_name,bio').eq('id', session.user.id).maybeSingle();
+      let { data: profile, error: profileError } = await supabase.from('profiles').select('role,display_name,bio,is_suspended').eq('id', session.user.id).maybeSingle();
       if (cancelled) return;
       if (profileError) {
         setNotice(`تعذر تحميل ملف الحساب: ${profileError.message}`);
@@ -132,6 +132,11 @@ export default function App() {
         }
       }
       if (cancelled) return;
+      if (profile?.is_suspended) {
+        await supabase.auth.signOut();
+        if (!cancelled) { setSession(null); setNotice('تم إيقاف هذا الحساب من مالك التطبيق. تواصل مع الإدارة للمراجعة.'); }
+        return;
+      }
       const role = profile?.role || 'customer'; setProfileRole(role); setProfileName(profile?.display_name || session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'مستخدم سلكني'); setProfileBio(profile?.bio || '');
       const customerQuery = await supabase.from('service_requests').select('id,title,details,status,created_at,preferred_at,professional_id,service_id,reviews(id)').eq('customer_id', session.user.id).order('created_at', { ascending: false });
       if (customerQuery.error) { if (!cancelled) setNotice(`تعذر تحميل طلباتك: ${customerQuery.error.message}`); }
@@ -302,7 +307,12 @@ export default function App() {
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email: authEmail.trim(), password: authPassword });
         if (error) throw error;
-        if (data.user) await ensureProfile(data.user, data.user.user_metadata?.display_name || 'مستخدم سلكني');
+        if (data.user) {
+          await ensureProfile(data.user, data.user.user_metadata?.display_name || 'مستخدم سلكني');
+          const { data: accountProfile, error: accountError } = await supabase.from('profiles').select('is_suspended').eq('id', data.user.id).maybeSingle();
+          if (accountError) throw accountError;
+          if (accountProfile?.is_suspended) { await supabase.auth.signOut(); throw new Error('تم إيقاف هذا الحساب من مالك التطبيق. تواصل مع الإدارة للمراجعة.'); }
+        }
         setAuthOpen(false); setNotice('');
       }
     } catch (err) { setNotice(err instanceof Error ? err.message : 'تعذر إكمال العملية. تحقق من البيانات وحاول مجددًا.'); }

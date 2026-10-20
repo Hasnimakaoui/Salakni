@@ -323,9 +323,9 @@ export default function App() {
     if (!supabase || !session?.user) { setAuthOpen(true); return; }
     setBusy(true);
     try {
-      const { error } = await supabase.from('professional_services').insert({ professional_id: session.user.id, title: serviceTitle.trim(), category: serviceCategory, description: serviceDescription.trim() || null, wilaya: serviceWilaya.trim(), city: serviceCity.trim(), starting_price_dzd: servicePrice.trim() ? Number(servicePrice) : null });
+      const { error } = await supabase.from('professional_services').insert({ professional_id: session.user.id, title: serviceTitle.trim(), category: serviceCategory, description: serviceDescription.trim() || null, wilaya: serviceWilaya.trim(), city: serviceCity.trim(), starting_price_dzd: servicePrice.trim() ? Number(servicePrice) : null, is_active: false });
       if (error) throw error;
-      setNotice('تم نشر الخدمة. ستظهر في دليل سلكني بعد تحديث القائمة.'); setServiceTitle(''); setServiceDescription(''); setServiceCity(''); setServicePrice('');
+      setNotice('تم إرسال الخدمة للمراجعة. ستظهر في دليل سلكني بعد موافقة مالك التطبيق وتفعيل الاشتراك.'); setServiceTitle(''); setServiceDescription(''); setServiceCity(''); setServicePrice('');
       const { data } = await supabase.from('professional_directory').select('*');
       if (data) setLivePros(data.map((row: any) => { const categoryName = String(row.category || row.service_title || 'خدمات منزلية'); const categoryIcon = /كهرب|electric/i.test(categoryName) ? Zap : /سباك|ماء|plumb/i.test(categoryName) ? Wrench : /دهان|paint/i.test(categoryName) ? Paintbrush : /نجار|wood/i.test(categoryName) ? Hammer : /تكييف|تبريد|air/i.test(categoryName) ? Snowflake : Home; const name = String(row.display_name || 'حرفي'); return { id: row.service_id, professionalId: row.professional_id, serviceId: row.service_id, isVerified: Boolean(row.is_verified), name, job: String(row.service_title || categoryName), city: [row.wilaya, row.city].filter(Boolean).join(' — ') || 'الجزائر', rating: Number(row.average_rating || 0).toFixed(1), jobs: `${Number(row.completed_jobs || 0)} خدمة`, price: row.starting_price_dzd == null ? 'حسب طبيعة العمل' : `ابتداءً من ${Number(row.starting_price_dzd).toLocaleString('fr-DZ')} دج`, initials: name.slice(0, 1), color: 'mint', icon: categoryIcon }; }));
       setDirectoryLoaded(true);

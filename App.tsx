@@ -82,7 +82,7 @@ export default function App() {
   const [adminPayments, setAdminPayments] = useState<any[]>([]);
   const [adminCategories, setAdminCategories] = useState<any[]>([]);
   const [adminAds, setAdminAds] = useState<any[]>([]);
-  const [adminSettings, setAdminSettings] = useState<Record<string, any>>({price_monthly:1000,price_pro_monthly:1500,price_pro_yearly:13000,ccp_account:'',ccp_account_name:'',baridimob_number:'',baridimob_account_name:'',payment_instructions:'حوّل المبلغ ثم أرفق إثبات الدفع.'});
+  const [adminSettings, setAdminSettings] = useState<Record<string, any>>({price_monthly:1000,price_pro_monthly:1500,price_pro_yearly:13000,ccp_account:'',ccp_account_name:'',baridimob_number:'',payment_instructions:'حوّل المبلغ ثم أرفق إثبات الدفع.'});
   const [adminSection, setAdminSection] = useState('overview');
   const [adminSearch, setAdminSearch] = useState('');
   const [categoryDraft, setCategoryDraft] = useState('');

@@ -70,7 +70,7 @@ export default function App() {
   const [activeConversationId, setActiveConversationId] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [messageDraft, setMessageDraft] = useState('');
-  const [messagesView, setMessagesView] = useState<'requests'|'chats'>('requests');
+  const [messagesView, setMessagesView] = useState<'requests'|'chats'|'support'>('requests');
   const [adminStats, setAdminStats] = useState({ users: 0, services: 0, requests: 0, reports: 0 });
   const [adminReports, setAdminReports] = useState<any[]>([]);
   const [adminAuditLogs, setAdminAuditLogs] = useState<any[]>([]);
@@ -432,7 +432,7 @@ export default function App() {
       id: user.id,
       display_name: displayName.length >= 2 ? displayName : 'مستخدم سلكني',
       role,
-      ...(role === 'professional' && metadataPhone ? { phone: metadataPhone, ...(professionalName ? { professional_name: professionalName } : {}) } : {})
+      ...(role === 'professional' && metadataPhone ? { phone: metadataPhone, ...(user.user_metadata?.professional_name ? { professional_name: String(user.user_metadata.professional_name).trim().slice(0, 60) } : {}) } : {})
     });
     // A concurrent login may create the same profile after the lookup. Treat only
     // that duplicate-key race as success; surface every other database/RLS error.

@@ -70,7 +70,7 @@ export default function App() {
   const [activeConversationId, setActiveConversationId] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([]);
   const [messageDraft, setMessageDraft] = useState('');
-  const [messagesView, setMessagesView] = useState<'requests'|'chats'|'support'>('requests');
+  const [messagesView, setMessagesView] = useState<'requests'|'chats'|'support'|'owner-support'>('requests');
   const [adminStats, setAdminStats] = useState({ users: 0, services: 0, requests: 0, reports: 0 });
   const [adminReports, setAdminReports] = useState<any[]>([]);
   const [adminAuditLogs, setAdminAuditLogs] = useState<any[]>([]);

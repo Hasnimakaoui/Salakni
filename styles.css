@@ -87,3 +87,27 @@ button,input,select,textarea{max-width:100%}
   .modal-backdrop{align-items:center}
   .app-modal{max-height:90dvh}
 }
+
+
+/* Hero composition fix: keep the toolbox illustration and trust label from covering each other */
+.hero{isolation:isolate;overflow:hidden;min-height:278px;padding-bottom:78px}
+.hero-copy{z-index:3;max-width:calc(100% - 138px)}
+.hero-art{z-index:1;left:12px;top:36px;width:126px;height:136px;pointer-events:none}
+.tool-emoji{position:relative;z-index:1;transform:translateY(-9px) rotate(-8deg)}
+.floating-tag{z-index:2;bottom:-1px;left:0;max-width:126px;justify-content:center;padding:7px 8px;font-size:8px;box-shadow:0 5px 14px #0002}
+.hero-search{z-index:4}
+@media(max-width:390px){
+ .hero{min-height:292px;padding:22px 15px 78px}
+ .hero-copy{max-width:calc(100% - 126px)}
+ .hero-art{left:7px;top:48px;width:112px;height:128px;transform:scale(.9);transform-origin:top left}
+ .tool-emoji{font-size:58px}
+ .floating-tag{left:-2px;bottom:0;max-width:112px;font-size:7px;padding:7px 6px;gap:4px}
+ .hero h1{font-size:27px;line-height:1.48}
+ .hero p{font-size:10px}
+}
+@media(min-width:600px){
+ .hero{min-height:286px}
+ .hero-copy{max-width:calc(100% - 160px)}
+ .hero-art{left:38px;top:34px}
+ .floating-tag{bottom:-2px}
+}

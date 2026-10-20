@@ -111,3 +111,103 @@ button,input,select,textarea{max-width:100%}
  .hero-art{left:38px;top:34px}
  .floating-tag{bottom:-2px}
 }
+
+
+/* Final search-bar layout fix: keep search inside the hero flow, never overlapping nearby content */
+.hero{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  min-height:0;
+  height:auto;
+  padding:24px 20px 20px;
+  overflow:hidden;
+  gap:0;
+}
+.hero-copy{
+  position:relative;
+  z-index:3;
+  width:100%;
+  max-width:calc(100% - 138px);
+  flex:0 0 auto;
+}
+.hero-art{
+  z-index:1;
+}
+.hero-search{
+  position:relative;
+  inset:auto;
+  z-index:4;
+  width:100%;
+  min-width:0;
+  flex:0 0 56px;
+  height:56px;
+  margin-top:22px;
+  right:auto;
+  left:auto;
+  bottom:auto;
+  box-sizing:border-box;
+}
+.trust-row{
+  margin-top:18px;
+}
+@media(max-width:390px){
+  .hero{
+    padding:20px 14px 16px;
+    gap:0;
+  }
+  .hero-copy{
+    max-width:calc(100% - 112px);
+  }
+  .hero h1{
+    font-size:25px;
+    line-height:1.42;
+    overflow-wrap:normal;
+  }
+  .hero p{
+    font-size:10px;
+    line-height:1.75;
+  }
+  .hero-art{
+    left:4px;
+    top:42px;
+    transform:scale(.78);
+    transform-origin:top left;
+  }
+  .floating-tag{
+    bottom:0;
+  }
+  .hero-search{
+    margin-top:20px;
+    gap:7px;
+    padding:6px;
+    height:54px;
+    flex-basis:54px;
+  }
+  .hero-search input{
+    font-size:10px;
+    width:0;
+  }
+  .hero-search button{
+    flex:0 0 auto;
+    padding:9px 10px;
+    font-size:11px;
+  }
+  .trust-row{
+    margin-top:16px;
+  }
+}
+@media(min-width:600px){
+  .hero{
+    padding:26px 28px 22px;
+  }
+  .hero-copy{
+    max-width:calc(100% - 160px);
+  }
+  .hero-search{
+    margin-top:24px;
+  }
+  .trust-row{
+    margin-top:18px;
+  }
+}

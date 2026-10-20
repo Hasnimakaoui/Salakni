@@ -385,3 +385,13 @@ button,input,select,textarea{max-width:100%}
 .required-phone-mark{display:inline-flex;align-items:center;margin-inline-start:6px;padding:3px 7px;border-radius:999px;background:#fff2d7;color:#91651b;font-size:10px;font-weight:900;vertical-align:middle}
 .phone-field-hint{display:block;margin-top:5px;color:#738579;font-size:10px;line-height:1.8}
 .professional-form-card label input[readonly]{background:#eef4ef;color:#456153;border-color:#dce8df;cursor:not-allowed}
+
+
+.admin-edit-full-button{width:100%;margin:10px 0;padding:11px 14px;border:1px solid #caa45c;border-radius:12px;background:linear-gradient(135deg,#182d27,#254b3c);color:#f6dfaa;font-weight:800;cursor:pointer}
+.admin-user-editor{width:min(760px,96vw);max-height:90vh;overflow:auto;padding:22px;border:1px solid rgba(202,164,92,.5);border-radius:20px;background:#fffdf8;box-shadow:0 24px 80px rgba(10,24,18,.32)}
+.admin-user-editor>p{color:#607267;font-size:13px;line-height:1.8}
+.admin-user-editor .admin-create-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.admin-user-editor .admin-create-form label{display:flex;flex-direction:column;gap:6px;color:#294438;font-size:12px;font-weight:800}
+.admin-user-editor .admin-create-form input,.admin-user-editor .admin-create-form textarea,.admin-user-editor .admin-create-form select{width:100%;min-width:0;box-sizing:border-box;padding:11px;border:1px solid #dce5dd;border-radius:10px;background:#fff;color:#1e3027}
+.admin-user-editor .admin-create-form .modal-submit{grid-column:1/-1}
+@media(max-width:560px){.admin-user-editor .admin-create-form{grid-template-columns:1fr}.admin-user-editor{padding:15px}}

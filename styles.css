@@ -462,3 +462,19 @@ button,input,select,textarea{max-width:100%}
 .admin-payment-settings>small{font-size:10px;color:#9b6a24;line-height:1.7}
 @media(min-width:700px){.admin-support-layout{grid-template-columns:minmax(190px,.8fr) minmax(0,1.5fr)}.subscription-center{padding:22px}.subscription-heading h3{font-size:24px}}
 @media(max-width:390px){.subscription-center{padding:12px;border-radius:18px}.payment-method-grid{grid-template-columns:1fr}.subscription-plan-grid{grid-template-columns:1fr}.subscription-plan{padding:11px}.subscription-plan b{font-size:20px}}
+
+
+/* Prominent owner contact card on the professional home screen */
+.owner-contact-feature{position:relative;isolation:isolate;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;margin:18px 16px;padding:19px;overflow:hidden;border:1px solid #c7e0d3;border-radius:23px;background:linear-gradient(125deg,#102f28 0%,#145b43 54%,#1b7654 100%);box-shadow:0 14px 34px #124b321f;color:#fff}
+.owner-contact-glow{position:absolute;z-index:-1;inset:auto -30px -80px auto;width:210px;height:210px;border-radius:50%;background:#8cf0bb18;filter:blur(2px)}
+.owner-contact-icon{position:relative;display:grid;place-items:center;gap:0;width:55px;height:55px;border:1px solid #ffffff30;border-radius:18px;background:#ffffff12;color:#d8f8e5}
+.owner-contact-icon svg:last-child{position:absolute;right:-5px;bottom:-5px;display:grid;place-items:center;width:25px;height:25px;padding:4px;border:2px solid #16583f;border-radius:50%;background:#bdf4d0;color:#14543b}
+.owner-contact-copy{min-width:0}
+.owner-contact-kicker{display:inline-block;margin-bottom:6px;color:#b8f4ce;font-size:10px;font-weight:900;letter-spacing:.2px}
+.owner-contact-copy h2{margin:0 0 7px;color:#fff;font-size:17px;line-height:1.55;font-weight:900}
+.owner-contact-copy p{margin:0;color:#e0f2e7;font-size:11px;line-height:1.9}
+.owner-contact-secure{display:flex;align-items:center;gap:7px;margin-top:10px;color:#c8ead6;font-size:10px;font-weight:700}
+.owner-contact-secure>span{width:7px;height:7px;border-radius:50%;background:#8cf0b0;box-shadow:0 0 0 4px #8cf0b01c}
+.owner-contact-button{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:46px;padding:12px 16px;border:0;border-radius:14px;background:linear-gradient(100deg,#e1ffe9,#b9f1ce);color:#12452f;font:inherit;font-size:12px;font-weight:900;box-shadow:0 5px 15px #071f171c;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+.owner-contact-button:active{transform:scale(.985);box-shadow:0 2px 8px #071f171c}
+@media(min-width:700px){.owner-contact-feature{grid-template-columns:auto minmax(0,1fr) auto;margin:22px auto;max-width:1050px;padding:22px 25px}.owner-contact-button{grid-column:auto;width:auto;min-width:150px}.owner-contact-copy h2{font-size:19px}}

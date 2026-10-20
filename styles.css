@@ -478,3 +478,36 @@ button,input,select,textarea{max-width:100%}
 .owner-contact-button{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:46px;padding:12px 16px;border:0;border-radius:14px;background:linear-gradient(100deg,#e1ffe9,#b9f1ce);color:#12452f;font:inherit;font-size:12px;font-weight:900;box-shadow:0 5px 15px #071f171c;cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
 .owner-contact-button:active{transform:scale(.985);box-shadow:0 2px 8px #071f171c}
 @media(min-width:700px){.owner-contact-feature{grid-template-columns:auto minmax(0,1fr) auto;margin:22px auto;max-width:1050px;padding:22px 25px}.owner-contact-button{grid-column:auto;width:auto;min-width:150px}.owner-contact-copy h2{font-size:19px}}
+
+
+/* Premium owner inbox: a separate, easy-to-open private thread for every professional */
+.owner-support-inbox{display:flex;flex-direction:column;gap:16px;padding:4px 0 18px}
+.owner-support-inbox-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:17px;border:1px solid #e6e8e5;border-radius:20px;background:linear-gradient(135deg,#fff 0%,#f3f8f5 100%)}
+.owner-support-inbox-heading h3{margin:5px 0 6px;font-size:19px;font-weight:900;color:#182b28}
+.owner-support-inbox-heading p{margin:0;color:#788781;font-size:12px;line-height:1.8}
+.owner-support-total{display:flex;align-items:center;gap:6px;flex-shrink:0;padding:8px 10px;border-radius:999px;background:#e1f2e8;color:#236b4f;font-size:11px;font-weight:900}
+.owner-support-card-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.owner-support-person-card{display:flex;align-items:center;gap:12px;width:100%;min-width:0;padding:14px;text-align:right;border:1px solid #e0e8e3;border-radius:19px;background:#fff;color:#1c302b;box-shadow:0 5px 16px #1a4b3010;cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease}
+.owner-support-person-card:active{transform:scale(.99)}
+.owner-support-person-card.active{border-color:#338366;background:linear-gradient(110deg,#eff9f3,#fff);box-shadow:0 7px 20px #246f4d15}
+.owner-support-person-avatar{position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;width:48px;height:48px;border-radius:16px;background:linear-gradient(145deg,#e5f5eb,#cfe9da);color:#2b7557}
+.owner-support-person-avatar i{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;padding:0 4px;border:2px solid white;border-radius:999px;background:#c58b35;color:#fff;font-size:9px;font-style:normal;font-weight:900;line-height:15px;text-align:center}
+.owner-support-person-details{display:flex;flex:1;flex-direction:column;gap:4px;min-width:0}
+.owner-support-person-details>b,.owner-support-person-details b{overflow:hidden;color:#203c32;font-size:14px;font-weight:900;text-overflow:ellipsis;white-space:nowrap}
+.owner-support-person-details>small{color:#8b9791;font-size:10px}
+.owner-support-last-message{overflow:hidden;max-width:100%;color:#64766d;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.owner-support-person-meta{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;color:#397b5e}
+.owner-support-person-meta>b{font-size:14px;font-weight:900}
+.owner-support-person-meta>small{font-size:9px;color:#8a9a91}
+.owner-support-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:180px;padding:25px;border:1px dashed #cbded2;border-radius:20px;background:#f8fbf9;text-align:center}
+.owner-support-empty>span{display:grid;place-items:center;width:54px;height:54px;border-radius:18px;background:#e2f3e9;color:#317a59}
+.owner-support-empty>b{font-size:15px;color:#2b4a3b}
+.owner-support-empty>p{margin:0;color:#829188;font-size:12px;line-height:1.8}
+.owner-support-thread{overflow:hidden;border:1px solid #dce7e0;border-radius:21px;background:#f8fbf9;box-shadow:0 8px 25px #143b2510}
+.owner-support-thread-heading{display:flex;align-items:center;gap:11px;padding:13px 15px;border-bottom:1px solid #e0e9e3;background:#fff}
+.owner-support-thread-heading>div{display:flex;flex-direction:column;gap:4px}
+.owner-support-thread-heading b{color:#213d31;font-size:13px;font-weight:900}
+.owner-support-thread-heading small{color:#849188;font-size:10px}
+.owner-support-thread .chat-message-list{min-height:150px;max-height:42vh;padding:15px;overflow-y:auto}
+.owner-support-thread .chat-compose{padding:10px;background:#fff;border-top:1px solid #e0e9e3}
+@media(min-width:760px){.owner-support-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.owner-support-thread .chat-message-list{max-height:520px}}

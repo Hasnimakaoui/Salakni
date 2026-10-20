@@ -155,7 +155,7 @@ export default function App() {
       if (!profile) {
         try {
           await ensureProfile(session.user, session.user.user_metadata?.display_name || session.user.email?.split('@')[0] || 'مستخدم سلكني');
-          const refreshed = await supabase.from('profiles').select('role,display_name,bio,phone,is_suspended').eq('id', session.user.id).maybeSingle();
+          const refreshed = await supabase.from('profiles').select('role,display_name,professional_name,bio,phone,is_suspended').eq('id', session.user.id).maybeSingle();
           if (refreshed.error) throw refreshed.error;
           profile = refreshed.data;
         } catch (error) {
@@ -338,7 +338,9 @@ export default function App() {
     if(!supabase || !session?.user || !['customer','professional'].includes(profileRole)){setNotice('سجّل الدخول بحساب زبون أو حرفي لإرسال طلب الاشتراك.');return;}
     const reference=transferReference.trim();
     if(reference.length<4){setNotice('أدخل رقم العملية أو مرجع التحويل الصحيح.');return;}
-    if(paymentMethod==='baridimob'&&!String(paymentSettings.baridimob_number||'').trim()){setNotice('لم يضبط المالك رقم بريدي موب بعد. لا ترسل أي تحويل حتى يظهر رقم رسمي داخل التطبيق.');return;}\n    if(paymentMethod==='ccp'&&!String(paymentSettings.ccp_account||'').trim()){setNotice('لم يضبط المالك حساب CCP بعد. لا ترسل أي تحويل حتى يظهر الحساب الرسمي داخل التطبيق.');return;}\n    if(!receiptFile){setNotice('أرفق صورة أو ملف PDF لإثبات الدفع.');return;}
+    if(paymentMethod==='baridimob'&&!String(paymentSettings.baridimob_number||'').trim()){setNotice('لم يضبط المالك رقم بريدي موب بعد. لا ترسل أي تحويل حتى يظهر رقم رسمي داخل التطبيق.');return;}
+    if(paymentMethod==='ccp'&&!String(paymentSettings.ccp_account||'').trim()){setNotice('لم يضبط المالك حساب CCP بعد. لا ترسل أي تحويل حتى يظهر الحساب الرسمي داخل التطبيق.');return;}
+    if(!receiptFile){setNotice('أرفق صورة أو ملف PDF لإثبات الدفع.');return;}
     if(receiptFile.size>5*1024*1024){setNotice('حجم الإيصال يجب ألا يتجاوز 5 ميغابايت.');return;}
     if(!['image/jpeg','image/png','image/webp','application/pdf'].includes(receiptFile.type)){setNotice('الأنواع المقبولة: JPG أو PNG أو WEBP أو PDF.');return;}
     if(myPayments.some(p=>p.status==='pending')){setNotice('لديك طلب دفع قيد المراجعة. انتظر قرار المالك قبل إرسال طلب جديد.');return;}
@@ -398,7 +400,8 @@ export default function App() {
     try {
       const { data: current, error: currentError } = await supabase.from('profiles').select('role,phone,professional_name').eq('id', session.user.id).single();
       if (currentError) throw currentError;
-      const patch: Record<string, any> = { display_name: name, bio: profileBio.trim() || null };\n      if (current.role === 'professional') { const nickname = professionalNickname.trim(); if (nickname.length < 2 || nickname.length > 60) { setNotice('اسم الشهرة المهني إلزامي ويجب أن يكون بين حرفين و60 حرفًا.'); return; } patch.professional_name = nickname; }
+      const patch: Record<string, any> = { display_name: name, bio: profileBio.trim() || null };
+      if (current.role === 'professional') { const nickname = professionalNickname.trim(); if (nickname.length < 2 || nickname.length > 60) { setNotice('اسم الشهرة المهني إلزامي ويجب أن يكون بين حرفين و60 حرفًا.'); return; } patch.professional_name = nickname; }
       if (current.role === 'professional' && !String(current.phone || '').trim()) {
         const phone = profilePhone.trim();
         if (!/^(([+]213|0)[0-9]{8,9})$/.test(phone.replace(/[\s-]/g,''))) { setNotice('رقم الهاتف للحرفي إلزامي. أدخل رقمًا جزائريًا صحيحًا، ولا يمكن تغييره بعد حفظه.'); return; }
@@ -442,7 +445,8 @@ export default function App() {
     try {
       if (authMode === 'signup') {
         const normalizedPhone = authPhone.trim().replace(/[\s-]/g,'');
-        if (accountType === 'professional' && authProfessionalName.trim().length < 2) { setNotice('اسم الشهرة المهني إلزامي، مثل: محمد للكهرباء.'); return; }\n        if (accountType === 'professional' && !/^(([+]213|0)[0-9]{8,9})$/.test(normalizedPhone)) { setNotice('رقم الهاتف إلزامي للحرفي. أدخل رقمًا جزائريًا صحيحًا مثل 0550123456.'); return; }
+        if (accountType === 'professional' && authProfessionalName.trim().length < 2) { setNotice('اسم الشهرة المهني إلزامي، مثل: محمد للكهرباء.'); return; }
+        if (accountType === 'professional' && !/^(([+]213|0)[0-9]{8,9})$/.test(normalizedPhone)) { setNotice('رقم الهاتف إلزامي للحرفي. أدخل رقمًا جزائريًا صحيحًا مثل 0550123456.'); return; }
         const { data, error } = await supabase.auth.signUp({ email: authEmail.trim(), password: authPassword, options: { data: { display_name: authName.trim(), account_type: accountType, ...(accountType === 'professional' ? { phone: normalizedPhone, professional_name: authProfessionalName.trim() } : {}) } } });
         if (error) throw error;
         if (data.session && data.user) await ensureProfile(data.user, authName.trim());

@@ -372,6 +372,11 @@ export default function App() {
       setSupportMessages(rows=>rows.some(m=>m.id===data.id)?rows:[...rows,data]);setSupportDraft('');
     }catch(err){setNotice(err instanceof Error?err.message:'تعذر إرسال الرسالة إلى المالك.');}finally{setBusy(false);}
   };
+  useEffect(() => {
+    if (profileRole !== 'owner' || selectedSupportProfessionalId || !adminUsers.length) return;
+    const firstProfessional = adminUsers.find(u => u.role === 'professional');
+    if (firstProfessional) setSelectedSupportProfessionalId(firstProfessional.id);
+  }, [profileRole, adminUsers, selectedSupportProfessionalId]);
   const sendOwnerSupportMessage = async (e:FormEvent) => {
     e.preventDefault();const body=adminSupportDraft.trim();
     if(!supabase||!session?.user||profileRole!=='owner'||!selectedSupportProfessionalId||!body)return;

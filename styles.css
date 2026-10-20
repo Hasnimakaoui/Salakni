@@ -39,3 +39,51 @@
 .live-ad-card b{font-size:14px;color:#765319}
 .live-ad-card p{font-size:12px;line-height:1.7;color:#5e6254;margin:7px 0}
 .live-ad-card a{font-size:12px;font-weight:700;color:#155c42}
+
+
+/* Layout stability patch: mobile-first RTL, prevent dashboard and cards from squeezing the screen */
+html{width:100%;min-width:320px;overflow-x:hidden;scroll-behavior:smooth}
+body,#root{width:100%;min-width:320px;min-height:100%;overflow-x:clip}
+.app-shell{width:100%;max-width:760px;margin-inline:auto;overflow-x:clip}
+main{min-width:0}
+img,svg,video{max-width:100%}
+button,input,select,textarea{max-width:100%}
+.section,.tab-page,.admin-dashboard,.professional-form-card{min-width:0}
+.admin-dashboard{overflow:hidden}
+.admin-nav{max-width:100%;overscroll-behavior-x:contain;scrollbar-width:thin}
+.admin-inline-controls>*{min-width:0}
+.admin-create-form>*{min-width:0}
+.admin-create-form label,.professional-form-card label{min-width:0}
+.admin-create-form input,.admin-create-form textarea,.admin-create-form select,
+.admin-inline-controls select,.admin-search,.professional-form-card input,
+.professional-form-card select,.professional-form-card textarea{box-sizing:border-box;max-width:100%}
+.admin-record>div:first-child,.audit-log-item>div,.request-card>div{min-width:0;flex-wrap:wrap}
+.request-card,.audit-log-item,.live-ad-card{overflow-wrap:anywhere;word-break:normal}
+.pro-card{min-width:0;padding-left:48px}
+.pro-card .pro-info{padding-left:0;min-width:0}
+.pro-name-row h3,.pro-info>p,.pro-bottom>b{overflow-wrap:anywhere}
+.pro-bottom{flex-wrap:wrap}
+.pro-bottom>b{min-width:0;flex:1 1 120px}
+.bottom-nav{padding-bottom:max(8px,env(safe-area-inset-bottom));height:calc(75px + env(safe-area-inset-bottom))}
+.app-modal{width:min(100%,520px);max-height:calc(100dvh - 20px);max-height:calc(100vh - 20px);overflow-y:auto;overscroll-behavior:contain}
+.modal-backdrop{padding:10px;align-items:center}
+.toast-notice{max-width:calc(100% - 24px);bottom:calc(88px + env(safe-area-inset-bottom))}
+@media(max-width:390px){
+  .pro-card{padding:12px 8px 12px 42px;gap:7px}
+  .pro-card .pro-info{padding-left:0}
+  .pro-avatar{width:40px;height:40px;border-radius:13px;font-size:19px}
+  .pro-meta{gap:6px}
+  .pro-bottom{align-items:stretch}
+  .pro-bottom button{padding:8px 7px}
+  .admin-dashboard{padding:12px}
+  .admin-stat-grid{gap:7px}
+  .admin-stat-grid>div{padding:10px}
+  .admin-stat-grid b{font-size:19px}
+  .admin-nav button{padding:8px 10px}
+  .section-heading{align-items:flex-start}
+  .hero-search button{padding-inline:12px}
+}
+@media(min-width:600px){
+  .modal-backdrop{align-items:center}
+  .app-modal{max-height:90dvh}
+}

@@ -62,6 +62,8 @@ export default function App() {
   const [reportPro, setReportPro] = useState<Pro | null>(null);
   const [reportReason, setReportReason] = useState('');
   const [livePros, setLivePros] = useState<Pro[]>([]);
+  const [visibleCategories, setVisibleCategories] = useState(categories);
+  const [liveAds, setLiveAds] = useState<any[]>([]);
   const [directoryLoaded, setDirectoryLoaded] = useState(false);
   const [profileRole, setProfileRole] = useState('customer');
   const [profileName, setProfileName] = useState('');
@@ -77,6 +79,20 @@ export default function App() {
     supabase.auth.getSession().then(({ data }) => setSession(data.session));
     const { data: listener } = supabase.auth.onAuthStateChange((_event, next) => { setSession(next); });
     return () => listener.subscription.unsubscribe();
+  }, []);
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.from('service_categories').select('name,icon,sort_order').eq('is_active',true).order('sort_order',{ascending:true}).then(({data,error}) => {
+      if (!error && data?.length) setVisibleCategories(data.map((row:any) => {
+        const n=String(row.name||'');
+        const icon=/كهرب/i.test(n)?Zap:/سباك|ماء/i.test(n)?Wrench:/دهان/i.test(n)?Paintbrush:/نجار/i.test(n)?Hammer:/تكييف|تبريد/i.test(n)?Snowflake:Home;
+        const color=/كهرب/i.test(n)?'gold':/سباك|ماء/i.test(n)?'blue':/دهان/i.test(n)?'peach':/نجار/i.test(n)?'lavender':'mint';
+        return {name:n,icon,color};
+      }));
+    });
+    supabase.from('ads').select('id,title,body,target_url').eq('is_active',true).lte('starts_at',new Date().toISOString()).order('created_at',{ascending:false}).limit(5).then(({data,error}) => {
+      if (!error && data) setLiveAds(data);
+    });
   }, []);
   useEffect(() => {
     if (!supabase) return;
@@ -390,9 +406,10 @@ export default function App() {
         <div className="hero-search"><Search size={20}/><input aria-label="ابحث عن خدمة أو حرفي" placeholder="واش راك حاب تصلّح اليوم؟" value={query} onChange={e=>setQuery(e.target.value)}/><button onClick={()=>document.getElementById('professionals')?.scrollIntoView({behavior:'smooth'})}>ابحث</button></div>
       </section>
       <section className="trust-row"><div><ShieldCheck/><span><b>حرفيون موثوقون</b><small>ملفات وتقييمات واضحة</small></span></div><div><Clock3/><span><b>وفّر وقتك</b><small>ابحث في مكان واحد</small></span></div><div><BriefcaseBusiness/><span><b>خدمات متنوعة</b><small>اختيارات قريبة منك</small></span></div></section>
+      {activeTab === 'الرئيسية' && liveAds.length > 0 && <section className="section live-ad-list"><div className="section-heading"><div><span className="section-kicker">من سلكني</span><h2>إعلانات وعروض</h2></div></div>{liveAds.map(ad=><article className="live-ad-card" key={ad.id}><b>{ad.title}</b><p>{ad.body}</p>{ad.target_url&&<a href={ad.target_url} target="_blank" rel="noreferrer">التفاصيل</a>}</article>)}</section>}
       {activeTab === 'الرئيسية' && <section className="section">
         <div className="section-heading"><div><span className="section-kicker">اختار واش تحتاج</span><h2>تصفّح حسب المهنة</h2></div><button className="text-button" onClick={()=>setCategory('الكل')}>كل المهن <ChevronLeft size={16}/></button></div>
-        <div className="category-grid">{categories.map(c=>{const Icon=c.icon; return <button key={c.name} className={`category-card ${category===c.name?'selected':''}`} onClick={()=>setCategory(category===c.name?'الكل':c.name)}><span className={`category-icon ${c.color}`}><Icon size={23}/></span><b>{c.name}</b></button>})}</div>
+        <div className="category-grid">{visibleCategories.map(c=>{const Icon=c.icon; return <button key={c.name} className={`category-card ${category===c.name?'selected':''}`} onClick={()=>setCategory(category===c.name?'الكل':c.name)}><span className={`category-icon ${c.color}`}><Icon size={23}/></span><b>{c.name}</b></button>})}</div>
       </section>}
       <section className="section" id="professionals">
         <div className="section-heading"><div><span className="section-kicker">ناس يخدموا بإتقان</span><h2>حرفيون مقترحون</h2></div><button className="filter-button" onClick={()=>setCity(city==='كل الولايات'?'الجزائر':'كل الولايات')}><SlidersHorizontal size={17}/> تصفية</button></div>

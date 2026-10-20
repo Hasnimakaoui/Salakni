@@ -12,6 +12,8 @@ const files = [
   '008_public_directory_rpc_and_security_grants.sql',
   '009_request_cancellation_rules.sql',
   '010_directory_pro_priority.sql',
+  '011_professional_nickname_support_and_receipts.sql',
+  '012_subscription_payment_integrity.sql',
 ];
 const required = new Map([
   ['001_initial_schema.sql', ['enable row level security', 'customers create requests', 'participants send messages', 'ensure_request_conversation']],

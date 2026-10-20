@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
-const source = await readFile(new URL('../src/App.tsx', import.meta.url), 'utf8');
-const viteEnv = await readFile(new URL('../src/vite-env.d.ts', import.meta.url), 'utf8');
+const source = await readFile(new URL('./App.tsx', import.meta.url), 'utf8');
+const viteEnv = await readFile(new URL('./vite-env.d.ts', import.meta.url), 'utf8');
 const checks = [
   ['profile lookup errors are surfaced', /if\s*\(profileError\)\s*\{[\s\S]{0,160}setNotice\(/],
   ['first-login profile race is repaired', /if\s*\(!profile\)\s*\{[\s\S]{0,350}await ensureProfile\(session\.user/],
@@ -11,6 +11,9 @@ const checks = [
   ['account request loading errors are surfaced', /customerQuery\.error[\s\S]{0,120}setNotice\(/],
   ['private chat loading errors are surfaced', /if\s*\(error\)\s*setNotice\(`تعذر تحميل الرسائل/],
   ['admin dashboard query errors are surfaced', /failedQuery\?\.error[\s\S]{0,100}setNotice\(/],
+  ['owner can edit professional phone', /saveAdminUserFull[\s\S]{0,700}phone=String\(d\.phone\|\|''\)\.trim\(\)\.replace\(\/\[\\s-\]\/g,''\)/],
+  ['public directory uses restricted RPC', /rpc\('get_professional_directory'\)/],
+  ['directory load errors are surfaced', /get_professional_directory'\)\.then\(\(\{ data, error \}\) => \{\s*if \(error\) \{ setNotice\(/],
 ];
 let failed = false;
 for (const [label, pattern] of checks) {
